@@ -242,6 +242,28 @@ void Session::setSingleAttributeSerializable(EIP_USINT class_id,
     Path(class_id, instance_id, attribute_id), data);
 }
 
+RRDataResponse Session::getExtendedSymbolSerializable(EIP_USINT service, std::string extended_symbol, shared_ptr<Serializable> data, Serializable& result)
+{
+  RRDataResponse resp_data = setExtendedSymbolSerializable(service, extended_symbol, data);
+
+  resp_data.getResponseDataAs(result);
+
+  return resp_data;
+}
+
+RRDataResponse Session::setExtendedSymbolSerializable(EIP_USINT service, std::string extended_symbol, shared_ptr<Serializable> data)
+{
+  Path path(false);
+  std::vector<EIP_USINT> extended_symbol_vector;
+  for (auto c: extended_symbol)
+  {
+    extended_symbol_vector.push_back((EIP_USINT) c);
+  }
+  path.addData(extended_symbol_vector);
+
+  return sendRRDataCommand(service, path, data);
+}
+
 RRDataResponse Session::sendRRDataCommand(EIP_USINT service, const Path& path,
   shared_ptr<Serializable> data)
 {
@@ -298,12 +320,10 @@ RRDataResponse Session::sendRRDataCommand(EIP_USINT service, const Path& path,
   return resp_data;
 }
 
-int Session::createConnection(const EIP_CONNECTION_INFO_T& o_to_t,
-  const EIP_CONNECTION_INFO_T& t_to_o,
+int Session::createConnection(Connection conn,
   EIP_USINT service,
   bool use_legacy_forward_open_request)
 {
-  Connection conn(o_to_t, t_to_o);
   conn.originator_vendor_id = my_vendor_id_;
   conn.originator_sn = my_serial_num_;
   conn.connection_sn = next_connection_sn_++;
