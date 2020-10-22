@@ -43,22 +43,6 @@ using serialization::Serializable;
 using serialization::Reader;
 using serialization::Writer;
 
-typedef enum
-{
-  CONN_PRIORITY_LOW       = 0,
-  CONN_PRIORITY_HIGH      = 1,
-  CONN_PRIORITY_SCHEDULED = 2,
-  CONN_PRIORITY_URGENT    = 3,
-} CONN_PRIORITY_T;
-
-typedef enum
-{
-  CONN_TYPE_NULL      = 0,
-  CONN_TYPE_MULTICAST = 1,
-  CONN_TYPE_P2P       = 2,
-  CONN_TYPE_RESERVED  = 3,
-} CONN_TYPE_T;
-
 /**
  * Class to encapsulate a ForwardOpenRequest data. Note that this is currently
  * only LARGE forward open, but could be easily changed to support both.
